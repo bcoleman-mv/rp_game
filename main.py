@@ -17,7 +17,6 @@ def draw_window(color: tuple[int,int,int]):
 
 def draw_player(player: Player):
     pygame.draw.circle(WIN, player.color, player.position, player.size)
-    pygame.display.update()
 
 def main():
     running = True
