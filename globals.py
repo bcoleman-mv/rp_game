@@ -6,5 +6,6 @@ FPS = 60
 KEYS = pygame.key.get_pressed()
 WHITE = (255, 255, 255)
 CLOCK = pygame.time.Clock()
+DT = 0
 
-PLAYER_MOVE_DISTANCE = 210
+PLAYER_MOVE_DISTANCE = 5

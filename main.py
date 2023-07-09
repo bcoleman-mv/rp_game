@@ -8,58 +8,40 @@ from player import Player
 pygame.display.set_caption("Let's Roleplay!")
 
 player_pos = pygame.Vector2(WIN.get_width() / 2, WIN.get_height() / 2)
-player1 = Player("red", 25)
+player = Player("red", 30)
 
 
-def draw_window(color: tuple[int,int,int], player: Player):
+def draw_window(color: tuple[int,int,int]):
     WIN.fill(color)
     draw_player(player)
     pygame.display.update()
 
 def draw_player(player: Player):
-    pygame.draw.circle(WIN, player.color, player.position, player.size)
+    pygame.draw.circle(WIN, player.color, player.position, player.radius)
+    
+def handle_movement(keys):
+    if keys[pygame.K_w]: # up
+        player.move_up()
+    if keys[pygame.K_s]: # down
+        player.move_down()
+    if keys[pygame.K_a]: # left
+        player.move_left()
+    if keys[pygame.K_d]: # right
+        player.move_right()
 
 def main():
     running = True
-
+    
     while running:
+        CLOCK.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        
-        if player1.position.x >= WIDTH:
-            player1.change_direction("left")
-        elif player1.position.x <= 0:
-            player1.change_direction("right")
-        elif player1.position.y >= HEIGHT:
-            player1.change_direction("up")
-        elif player1.position.y <= 0:
-            player1.change_direction("down")
             
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
-            player1.change_direction("up")
-        if keys[pygame.K_s]:
-            player1.change_direction("down")
-        if keys[pygame.K_a]:
-            player1.change_direction("left")
-        if keys[pygame.K_d]:
-            player1.change_direction("right")
-        
-        player1.move()
-        draw_window(WHITE, player1)
-        
-        # if KEYS[pygame.K_w]:
-        #     player1.move(pygame.K_w)
-        # if KEYS[pygame.K_s]:
-        #     player1.move(pygame.K_s)
-        # if KEYS[pygame.K_a]:
-        #     player1.move(pygame.K_a)
-        # if KEYS[pygame.K_d]:
-        #     player1.move(pygame.K_d)
+        handle_movement(keys)
 
-        # pygame.display.flip()
-        # dt = CLOCK.tick(60) / 1000
+        draw_window(WHITE)
         
     print("Game Ended")
     pygame.quit()
