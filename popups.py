@@ -26,8 +26,7 @@ class Popup:
         WIN.blit(self.label, self.labelRect)
 
         #draw buttons
-        print(len(self.button_text))
-        self.button_width = ((1/len(self.button_text))*self.width) - ((2/10*self.width))
+        self.button_width = ((1/len(self.button_text))*self.width) - ((1/10*self.width))
         self.button_height = self.width/8
         self.button_space = (self.width - (len(self.button_text) * self.button_width))/(len(self.button_text) + 1)
 
@@ -38,5 +37,7 @@ class Popup:
             pygame.draw.rect(WIN,"pink",button_rect)
 
             button_label = self.buttin_font.render(self.button_text[i], True, "black")
-            WIN.blit(button_label, button_rect)
+            button_label_rect = button_label.get_rect()
+            button_label_rect.center = button_rect.center
+            WIN.blit(button_label, button_label_rect)
         
