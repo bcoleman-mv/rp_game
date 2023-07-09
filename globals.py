@@ -9,3 +9,5 @@ CLOCK = pygame.time.Clock()
 DT = 0
 
 PLAYER_MOVE_DISTANCE = 5
+
+clientNumber = 0

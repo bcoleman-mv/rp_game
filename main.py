@@ -11,7 +11,7 @@ player_pos = pygame.Vector2(WIN.get_width() / 2, WIN.get_height() / 2)
 player = Player("red", 30)
 
 
-def draw_window(color: tuple[int,int,int]):
+def redraw_window(color: tuple[int,int,int]):
     WIN.fill(color)
     draw_player(player)
     pygame.display.update()
@@ -41,7 +41,7 @@ def main():
         keys = pygame.key.get_pressed()
         handle_movement(keys)
 
-        draw_window(WHITE)
+        redraw_window(WHITE)
         
     print("Game Ended")
     pygame.quit()
