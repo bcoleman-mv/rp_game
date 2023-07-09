@@ -8,7 +8,7 @@ pygame.init()
 
 pygame.display.set_caption("Let's Roleplay!")
 
-start_popup = Popup("blue", 225, 100, 200, 300, "Want to roleplay?", 2)
+start_popup = Popup("blue", 225, 100, 200, 300, "Want to roleplay?", ["Start", "Leave", "eat ass"])
 
 player_pos = pygame.Vector2(WIN.get_width() / 2, WIN.get_height() / 2)
 player = Player("red", 30)
