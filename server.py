@@ -1,8 +1,11 @@
+import pickle
 from globals import *
 import pygame
 import socket
 from _thread import *
 import sys
+
+from player import Player
 
 server = "10.0.0.9"
 port = 5555
@@ -17,42 +20,32 @@ except socket.error as e:
 s.listen(2)
 print("Waiting for connection, Server Started")
 
-def read_pos(str: str):
-    print("str (server): ", str)
-    str = str.split(",")
-    x = int(float(str[0]))
-    y = int(float(str[1]))
-    return pygame.Vector2(x, y)
+leftPos = pygame.Vector2(SCREEN_WIDTH * 0.33, SCREEN_HEIGHT * 0.5)
+rightPos = pygame.Vector2(SCREEN_WIDTH * 0.67, SCREEN_HEIGHT * 0.5)
 
-def make_pos(pos: pygame.Vector2):
-    return str(pos.x) + "," + str(pos.y)
-
-leftPos = pygame.Vector2(int(SCREEN_WIDTH * 0.33), int(SCREEN_HEIGHT * 0.5))
-rightPos = pygame.Vector2(int(SCREEN_WIDTH * 0.67), int(SCREEN_HEIGHT * 0.5))
-
-pos = [leftPos, rightPos]
+players = [Player("blue", 15, leftPos), Player("red", 15, rightPos)]
 
 def threaded_client(conn, player: int):
-    conn.send(str.encode(make_pos(pos[player])))
+    conn.send(pickle.dumps(players[player]))
     reply = ""
     while True:
         try:
-            data = read_pos(conn.recv(2048).decode())
-            pos[player] = data
+            data = pickle.loads(conn.recv(2048))
+            players[player] = data
             
             if not data:
                 print("Disconnected")
                 break
             else:
                 if player == 1:
-                    reply = pos[0]
+                    reply = players[0]
                 else:
-                    reply = pos[1]
+                    reply = players[1]
                     
                 print("Received: ", data)
                 print("Sending:  ", reply)
                 
-            conn.sendall(str.encode(make_pos(reply)))
+            conn.sendall(pickle.dumps(reply))
         except:
             break
     
