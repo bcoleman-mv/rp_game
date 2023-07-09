@@ -1,11 +1,14 @@
 from globals import *
 
 from player import Player
+from popups import *
 
 # pygame setup
-# pygame.init()
+pygame.init()
 
 pygame.display.set_caption("Let's Roleplay!")
+
+start_popup = Popup("blue", 225, 100, 200, 300, "Want to roleplay?", 2)
 
 player_pos = pygame.Vector2(WIN.get_width() / 2, WIN.get_height() / 2)
 player = Player("red", 30)
@@ -14,6 +17,7 @@ player = Player("red", 30)
 def redraw_window(color: tuple[int,int,int]):
     WIN.fill(color)
     draw_player(player)
+    Popup.display_popup(start_popup)
     pygame.display.update()
 
 def draw_player(player: Player):
@@ -40,7 +44,6 @@ def main():
             
         keys = pygame.key.get_pressed()
         handle_movement(keys)
-
         redraw_window(WHITE)
         
     print("Game Ended")
