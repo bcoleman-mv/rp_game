@@ -41,3 +41,5 @@ class Popup:
             button_label_rect.center = button_rect.center
             WIN.blit(button_label, button_label_rect)
         
+class StartPopup(Popup):
+    
