@@ -11,7 +11,7 @@ class Popup:
         self.width = width
         self.text = text
         self.button_text = button_text
-        self.buttin_font = pygame.font.Font("arial.ttf", 16)
+        self.button_font = pygame.font.Font("arial.ttf", 16)
         self.background = pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
 
     def display_popup(self):
@@ -36,10 +36,9 @@ class Popup:
             button_rect = pygame.Rect(button_x_pos, button_y_pos, self.button_width, self.button_height)
             pygame.draw.rect(WIN,"pink",button_rect)
 
-            button_label = self.buttin_font.render(self.button_text[i], True, "black")
+            button_label = self.button_font.render(self.button_text[i], True, "black")
             button_label_rect = button_label.get_rect()
             button_label_rect.center = button_rect.center
             WIN.blit(button_label, button_label_rect)
         
 class StartPopup(Popup):
-    
