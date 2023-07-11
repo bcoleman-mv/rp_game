@@ -1,62 +1,71 @@
 import pickle
+import threading
+from uuid import UUID
+from game import Game
 from globals import *
-import pygame
 import socket
-from _thread import *
-import sys
-
 from player import Player
 
-server = "10.0.0.9"
-port = 5555
+PORT = 5050
+# Change to public ip address to run on internet
+SERVER = socket.gethostbyname(socket.gethostname())
+ADDR = (SERVER, PORT)
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
-    s.bind((server,port))
+    server.bind(ADDR)
 except socket.error as e:
     str(e)
 
-s.listen(2)
-print("Waiting for connection, Server Started")
-
-leftPos = pygame.Vector2(SCREEN_WIDTH * 0.33, SCREEN_HEIGHT * 0.5)
-rightPos = pygame.Vector2(SCREEN_WIDTH * 0.67, SCREEN_HEIGHT * 0.5)
-
-players = [Player("blue", 15, leftPos), Player("red", 15, rightPos)]
-
-def threaded_client(conn, player: int):
-    conn.send(pickle.dumps(players[player]))
-    reply = ""
+def handle_client(conn, addr, playerId: UUID, game: Game):
+    player = game.get_player(playerId)
+    conn.send(pickle.dumps(player))
+    
     while True:
         try:
-            data = pickle.loads(conn.recv(2048))
-            players[player] = data
+            player_data = pickle.loads(conn.recv(2048))
             
-            if not data:
-                print("Disconnected")
-                break
-            else:
-                if player == 1:
-                    reply = players[0]
-                else:
-                    reply = players[1]
-                    
-                print("Received: ", data)
-                print("Sending:  ", reply)
+            if game.is_connected():
                 
-            conn.sendall(pickle.dumps(reply))
+                if not player_data:
+                    break
+                
+                game.update_player(player_data)
+                conn.sendall(pickle.dumps(game))
+            else:
+                break
+            
         except:
             break
     
+    game.remove_player(playerId)
+    conn.sendall(pickle.dumps(game))
+
+    if game.no_players_remaining():
+        game.disconnect()
     
-    print("Lost Connection")
     conn.close()
 
-currentPlayer = 0
-while True:
-    conn, addr = s.accept()
-    print("Connected to:", addr)
+game = Game()
+
+def start():
+    print("\n[STARTING] Server is starting...")
     
-    start_new_thread(threaded_client, (conn, currentPlayer))
-    currentPlayer += 1
+    server.listen()
+    print(f"[LISTENING] Server is listening on {SERVER}\n")
+    
+    while True:
+        conn, addr = server.accept()
+        
+        if not game.is_connected():
+            game.connect()
+            
+        if not game.max_capacity_reached():
+            print(f"\n[NEW CONNECTION] {addr} connected.")
+            player = game.add_new_player()
+            thread = threading.Thread(
+                target=handle_client, args=(conn, addr, player.id, game))
+            thread.start()
+            print(f"\n[ACTIVE CONNECTIONS] {threading.active_count() - 1}\n")
+
+start()
