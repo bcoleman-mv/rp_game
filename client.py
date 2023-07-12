@@ -7,13 +7,12 @@ from network import Network
 
 
 WIN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-WIN.fill(COLOR_WHITE)
+WIN.fill(BACKGROUND_COLOR)
 pygame.display.set_caption("Let's Roleplay!")
 
 def redraw_window(game: Game):
-    WIN.fill(COLOR_WHITE)
+    WIN.fill(BACKGROUND_COLOR)
     game.draw_players(WIN)
-    pygame.display.update()
     
 def main():
     running = True
@@ -39,5 +38,7 @@ def main():
         
         player.move()
         redraw_window(game)
+        pygame.display.update()
 
-main()
+if __name__ == "__main__":
+    main()

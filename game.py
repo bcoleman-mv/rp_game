@@ -1,17 +1,16 @@
 import random
 from uuid import UUID
+import uuid
 import pygame
-from pygame.colordict import THECOLORS
-from globals import SCREEN_HEIGHT, SCREEN_WIDTH
+from globals import *
 from player import Player
 from playerlist import PlayerList
 
-MAX_CAPACITY = 3
-
 class Game:
     def __init__(self):
+        self.id = uuid.uuid4()
         self.ready = False
-        self.players = PlayerList(MAX_CAPACITY)
+        self.players = PlayerList(MAX_GAME_CAPACITY)
         
     def get_players(self):
         return self.players.get_players()
@@ -34,30 +33,27 @@ class Game:
     
     def _create_player(self):
         order = len(self.players) + 1
-        player_color = self._get_random_color()
+        player_color = self._get_available_color()
         player_position = pygame.Vector2(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-        return Player(order, player_color, 20, player_position)
+        return Player(player_color, 20, order, player_position)
     
-    def _get_random_color(self):
+    def _get_available_color(self):
         r_color = random.choice(list(THECOLORS.keys()))
         not_avail_colors = [p.color for p in self.players.get_players()]
         if r_color not in not_avail_colors and r_color != "white":
             return r_color
-        return self._get_random_color()
+        return self._get_available_color()
     
     def remove_player(self, playerId: UUID):
         rm_player = self.players.remove(playerId)
-        self._update_player_order(rm_player.order)
         print(f"Player {rm_player.order} disconnected from the game")
+        self._update_player_order(rm_player.order)
         
-    def _update_player_order(self, order):
-        d = {k:self._subtract_order(v) if v.order > order else v for (k,v) in self.players.get_dict()}
-        self.players = PlayerList(MAX_CAPACITY, d)
-
-    @staticmethod
-    def _subtract_order(player: Player):
-        player.order -= 1
-        return player
+    def _update_player_order(self, rm_order):
+        for p in self.players.get_players():
+            if p.order > rm_order:
+                p.order -= 1
+                self.players.update(p)
         
     def draw_players(self, WIN: pygame.surface):
         for player in self.players.get_players():

@@ -4,10 +4,9 @@ from uuid import UUID
 from game import Game
 from globals import *
 import socket
-from player import Player
 
 PORT = 5050
-# Change to public ip address to run on internet
+# Change to public ip address to play on the internet
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 
@@ -68,4 +67,5 @@ def start():
             thread.start()
             print(f"\n[ACTIVE CONNECTIONS] {threading.active_count() - 1}\n")
 
-start()
+if __name__ == "__main__":
+    start()

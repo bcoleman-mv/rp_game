@@ -7,7 +7,8 @@ from player import Player
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "192.168.1.67"
+        # Change to public ip address to play on the internet
+        self.server = socket.gethostbyname(socket.gethostname())
         self.port = 5050
         self.addr = (self.server, self.port)
         self.player = self.connect()
