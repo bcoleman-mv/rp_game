@@ -1,21 +1,24 @@
-from globals import *
-
+import pygame
 pygame.init()
 
+from globals import *
+from button import *
+
 class Popup:
-    def __init__(self, color:str, x_pos:int, y_pos:int, height:int, width:int, text:str, button_text:list):
+    def __init__(self, color:str, x_pos:int, y_pos:int, height:int, width:int, text:str, buttons:list):
         self.color = color
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.height = height
         self.width = width
         self.text = text
-        self.button_text = button_text
-        self.button_font = pygame.font.Font("arial.ttf", 16)
+        self.buttons = buttons
+        
+    def display_popup(self):
         self.background = pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
 
-    def display_popup(self):
         #draw background
+        action = True
         pygame.draw.rect(WIN, "tan", self.background)
 
         #draw text
@@ -26,19 +29,16 @@ class Popup:
         WIN.blit(self.label, self.labelRect)
 
         #draw buttons
-        self.button_width = ((1/len(self.button_text))*self.width) - ((1/10*self.width))
-        self.button_height = self.width/8
-        self.button_space = (self.width - (len(self.button_text) * self.button_width))/(len(self.button_text) + 1)
+        for i in range(len(self.buttons)):
+            if Button.display_button(self.buttons[i]) == False:
+                print("exit")
+                action = False
+            return action
 
-        for i in range(len(self.button_text)):
-            button_y_pos = (self.button_height * 3) + self.height/2
-            button_x_pos = (((i+1)*self.button_space) + (i*self.button_width))+self.x_pos
-            button_rect = pygame.Rect(button_x_pos, button_y_pos, self.button_width, self.button_height)
-            pygame.draw.rect(WIN,"pink",button_rect)
-
-            button_label = self.button_font.render(self.button_text[i], True, "black")
-            button_label_rect = button_label.get_rect()
-            button_label_rect.center = button_rect.center
-            WIN.blit(button_label, button_label_rect)
-        
 class StartPopup(Popup):
+    def __init__(self):
+        startButton = Button("blue", 200, 200, 100, 50, "Start")        
+        super().__init__(self.color, self.x_pos, self.y_pos, self.height, self.width, [startButton])
+        self.background = pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
+
+
