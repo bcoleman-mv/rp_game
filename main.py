@@ -9,7 +9,9 @@ pygame.init()
 
 pygame.display.set_caption("Let's Roleplay!")
 
-startButton = Button("blue", 200, 200, 100, 50, "Start")        
+startButton = Button("blue", WIN.get_width() / 2, WIN.get_height() / 2, 50, 25, "Start")
+start_popup = Popup(200, 200, 200, 200, "Start", [startButton])
+
 
 player_pos = pygame.Vector2(WIN.get_width() / 2, WIN.get_height() / 2)
 player = Player("red", 30)
@@ -36,21 +38,25 @@ def handle_movement(keys):
 def main():
 
     running = True
+    startup = True
     
     while running:
         CLOCK.tick(60)
+        WIN.fill(WHITE)
+        # if startup:
+        #     if StartPopup.display_popup() == False:
+        #         startup = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        startup = True
-        while startup:
-            if Button.display_button(startButton) == False:
-                startup = False
             
         keys = pygame.key.get_pressed()
         handle_movement(keys)
-        redraw_window(WHITE)
+        Popup.display_popup(start_popup)
+        draw_player(player)
+        pygame.display.update()
+        #redraw_window(WHITE)
         
     print("Game Ended")
     pygame.quit()
