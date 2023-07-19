@@ -11,7 +11,6 @@ class Popup:
         self.rect.center = (x_pos, y_pos)
         self.text = text
         self.buttons = buttons
-        self.rect = POPUP_IMG.get_rect()
         
         
     def display_popup(self):
@@ -20,10 +19,10 @@ class Popup:
         action = True
 
         #draw text
-        self.font = pygame.font.Font("arial.ttf", 32)
-        self.label = self.font.render(self.text, True, "black")
+        self.font = pygame.font.Font("prstart.ttf", 26)
+        self.label = self.font.render(self.text, True, "white")
         self.labelRect = self.label.get_rect()
-        self.labelRect.center = self.rect.centerx, self.rect.centery - self.rect.height/2
+        self.labelRect.center = self.rect.centerx, self.rect.centery - self.rect.height/4
         WIN.blit(self.label, self.labelRect)
 
         #draw buttons

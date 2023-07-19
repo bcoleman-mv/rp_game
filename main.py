@@ -9,8 +9,8 @@ pygame.init()
 
 pygame.display.set_caption("Let's Roleplay!")
 
-startButton = Button( WIN.get_width() / 2, WIN.get_height() / 2, 50, 25, "Start")
-start_popup = Popup(200, 200, 100, 200, "Start", [startButton])
+startButton = Button( WIN.get_width() / 2, HEIGHT/2 + START_POPUP_HEIGHT/6, 100, 35, "Start")
+start_popup = Popup(START_POPUP_X, START_POPUP_Y, START_POPUP_HEIGHT, START_POPUP_WIDTH, "Start", [startButton])
 
 
 player_pos = pygame.Vector2(WIN.get_width() / 2, WIN.get_height() / 2)
@@ -52,7 +52,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                
+
         if player_move:    
             keys = pygame.key.get_pressed()
             handle_movement(keys)

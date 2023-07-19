@@ -9,7 +9,7 @@ class Button:
         self.text = text
         self.rect = self.image.get_rect()
         self.rect.center = (x_pos, y_pos)
-        self.font = pygame.font.Font("arial.ttf", 16)
+        self.font = pygame.font.Font("prstart.ttf", 10)
 
     def display_button(self):
         action = True
@@ -19,9 +19,8 @@ class Button:
         if self.rect.collidepoint(pos) and pygame.mouse.get_pressed()[0] == 1:
             action = False
 
-        self.rect.center = WIN.get_rect().center
         WIN.blit(self.image, (self.rect.x, self.rect.y))
-        self.label = self.font.render(self.text, True, "black")
+        self.label = self.font.render(self.text, True, "white")
         self.label_rect = self.label.get_rect()
         self.label_rect.center = self.rect.center
         WIN.blit(self.label, self.label_rect)
